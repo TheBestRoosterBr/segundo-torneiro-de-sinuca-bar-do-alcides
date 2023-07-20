@@ -1,5 +1,7 @@
 #pragma once
 
+
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 
 class Game

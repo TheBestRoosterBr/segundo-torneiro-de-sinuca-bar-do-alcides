@@ -1,5 +1,7 @@
-#include <SFML/Graphics.hpp>
+#pragma once
 
+#include <SFML/Graphics.hpp>
+#define SFML_STATIC
 typedef double inerciaRotacional;
 
 class Bola {

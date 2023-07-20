@@ -1,4 +1,5 @@
 #pragma once
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 #include "Mesa.h"
 #include "Bolas.h"
