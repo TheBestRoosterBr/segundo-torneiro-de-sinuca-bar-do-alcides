@@ -10,7 +10,10 @@ protected:
 	int radius;
 	inerciaRotacional L;
 	int mass;
-	
+	sf::CircleShape shape;
+
+
+
 
 public:
 	void init() {
