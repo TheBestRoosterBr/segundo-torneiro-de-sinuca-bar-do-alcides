@@ -6,12 +6,25 @@
 class Mesa
 {
 public:
-	void init() {
-		texture.loadFromFile("Assets/mesa.png");
+	Mesa() {
+		texture.loadFromFile("../Assets/mesa.png");
 		mesaSpr.setTexture(texture);
+		mesaSpr.setScale(0.25,0.25);
+		for (int i = 1; i < 15; i++) {
+			Bola b(i);
+			balls.push_back(b);
+		}
 	}
 	void update() {
 
+	}
+	void draw(sf::RenderWindow& window) {
+		window.draw(mesaSpr);
+		bolao.show(window);
+		for(Bola bola : balls) {
+			bola.show(window);
+		}
+		
 	}
 
 private:

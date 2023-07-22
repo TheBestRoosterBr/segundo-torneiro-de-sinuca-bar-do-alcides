@@ -35,5 +35,8 @@
     <ClInclude Include="Taco.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="parOuImpar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
