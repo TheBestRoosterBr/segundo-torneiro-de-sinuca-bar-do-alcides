@@ -16,16 +16,23 @@ class Tacada {
 
 	float idleTimer = 0;
 
-	float aproach = -100;
+	float aproach = 0;
 
 
 
 
 public:
-	bool hitPower = 0;
+	float hitPower = 0;
+
+	bool fixedAng = false;
+	float targetDist = 0;
+
+	bool vanishing = false;
+	bool aproaching = false;
 	bool hitting = false;
 	bool hitted = false;
 	float hitAngle = 0;
+	sf::Vector2f hitDir;
 
 	Tacada() {
 		tacoTex.loadFromFile("../Assets/tacoInicial.png");
@@ -38,66 +45,112 @@ public:
 
 	}
 
-	void setTarget(sf::Vector2f tar) {
+	void setTarget(sf::Vector2f tar, Input input) {
 		target = tar;
-		hitting = true;
 		hitted = false;
+		fixedAng = true;
 		hitAngle = angle;
-		hitPower = (1 + sin(idleTimer)) * 20;
+		hitDir.x = cos(angle);
+		hitDir.y = sin(angle);
+		idleTimer = 0;
+		pos = target;
+		targetDist = maximum(0, -vecDot(hitDir, target - sf::Vector2f(input.mousePos.x, input.mousePos.y)));
+		hitPower = targetDist/300;
 	}
 
-	void update(sf::Vector2f bolaoPos, float mouseX, float mouseY, bool mouseClick) {
+	void update(sf::Vector2f bolaoPos, Input& input) {
 
 
 		if (hitting) {
 			idleTimer = 0;
-			aproach += 10;
-			if (aproach >= 0) {
+			targetDist -= 10;
+			if (targetDist <= 0) {
 				hitted = true;
 				hitting = false;
-				aproach = -100;
+				vanishing = true;
+				
+			}
+		}
+		else if(fixedAng) {
+			targetDist = maximum(0, - vecDot(hitDir, target - sf::Vector2f(input.mousePos.x, input.mousePos.y)));
+			hitPower = targetDist/300;
+
+			if (input.mouseState[0][1]) {
+				hitting = true;
+				fixedAng = false;
+			}
+
+			if (input.mouseState[1][1]) {
+				fixedAng = false;
+				targetDist = 0;
 			}
 		}
 		else {
 
 
-			float dx = mouseX - bolaoPos.x;
-			float dy = mouseY - bolaoPos.y;
 
+			float dx = input.mousePos.x - bolaoPos.x;
+			float dy = input.mousePos.y - bolaoPos.y;
 
-			float Deg2Rad = 3.1415 / 180;
 			float ang = atan2(dy, dx);
 			if (ang < 0)
 			{
-				ang = Deg2Rad * 360 + ang;
+				ang = deg2Rad(360) + ang;
 			}
 
 
+			if (vanishing) {
+				aproach += 20;
+				if (aproach > 4000) {
+					vanishing = false;
+				}
+			}
+			else {
+				angle = ang;
+
+				pos.x = input.mousePos.x;
+				pos.y = input.mousePos.y;
+			}
 
 
-
-			angle = ang;
-
-			pos.x = mouseX;
-			pos.y = mouseY;
+			if (!aproaching) {
+				if (input.mouseState[0][1]) {
+					vanishing = false;
+					if (aproach <= 0) {
+						setTarget(bolaoPos, input);
+					}
+					else {
+						aproaching = true;
+					}
+				}
+			}
+			else {
+				aproach -= 50;
+				if (aproach < 0) {
+					aproach = 0;
+					aproaching = false;
+				}
+			}
+		
 
 			idleTimer += 0.05;
 
-			if (mouseClick) {
-				setTarget(bolaoPos);
-			}
+			
 
 		}
 	}
 
 	void show(sf::RenderWindow& window) {
 
-		float Rad2Deg =  180/ 3.1415;
+		
 		tacoSpr.setOrigin(0, 20);
-		tacoSpr.setRotation(angle * Rad2Deg);
+		tacoSpr.setRotation(rad2Deg(angle));
 
+		// Varies from 0 to 100
+		float phase = (sin(idleTimer) + 1) * 50;
+		float dist = phase + targetDist + aproach;
 
-		tacoSpr.setPosition(pos.x + cos(angle)*( -aproach  + (sin(idleTimer) + 1)*50), pos.y + sin(angle) * (-aproach + (sin(idleTimer)+1) * 50));
+		tacoSpr.setPosition(pos.x + cos(angle)*dist, pos.y + sin(angle) * dist);
 
 		window.draw(tacoSpr);
 	}

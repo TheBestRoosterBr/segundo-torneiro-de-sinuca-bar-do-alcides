@@ -48,7 +48,7 @@ protected:
 	sf::Text number;
 
 #define START_POSITION_X 1100
-#define START_POSITION_Y 360
+#define START_POSITION_Y 450
 
 
 public:
@@ -60,6 +60,7 @@ public:
 	float friction = 0.005;
 	int num;
 	int radius;
+	bool out = false;
 
 
 	Bola() {
@@ -68,32 +69,43 @@ public:
 	Bola(int num) {
 		vel.x = 0;
 		vel.y = 0;
-		radius = 20;
+		radius = 18;
 		mass = 1;
 		L = 2 / 5 * mass * (radius * radius);
 		this->num = num;
 
-		shape.setRadius(radius);
-		shape.setOrigin(sf::Vector2f(radius, radius));
-	
-		BlackOrWhite.setRadius(radius / 2);
-		BlackOrWhite.setOrigin(sf::Vector2f(radius / 2, radius / 2));
+		
+		shape.setOutlineColor(sf::Color::Black);
+		shape.setOutlineThickness(2);
 
 		if (num == 0) {
+
+			radius = 22;
 			shape.setFillColor(sf::Color::White);
 			BlackOrWhite.setFillColor(sf::Color::White);
 
 			pos.x = START_POSITION_X - 500;
 			pos.y = START_POSITION_Y;
 
+			shape.setRadius(radius);
+			shape.setOrigin(sf::Vector2f(radius, radius));
+
+			BlackOrWhite.setRadius(radius / 2);
+			BlackOrWhite.setOrigin(sf::Vector2f(radius / 2, radius / 2));
+
 		} else {
 			shape.setFillColor(ColorMap[num]);
 			
+			shape.setRadius(radius);
+			shape.setOrigin(sf::Vector2f(radius, radius));
+
+			BlackOrWhite.setRadius(radius / 2);
+			BlackOrWhite.setOrigin(sf::Vector2f(radius / 2, radius / 2));
 
 			int ballInd = num - 1;
 
 			int layer = numToLayer(ballInd);
-			float layerHei = radius * sqrt(3.5);
+			float layerHei = radius * sqrt(3);
 
 			pos.x = START_POSITION_X + layer * layerHei;
 			pos.y = START_POSITION_Y - ((float)((radius * 2) * (layer + 1)) / 2) + (ballInd - layerMinNum(layer)) * radius * 2;
@@ -149,6 +161,12 @@ public:
 	void setPos(float x, float y) {
 		pos.x = x;
 		pos.y = y;
+	}
+
+
+	void resetPos() {
+		pos.x = START_POSITION_X - 500;
+		pos.y = START_POSITION_Y;
 	}
 
 	sf::Vector2f getPos() {

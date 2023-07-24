@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #define SFML_STATIC
+#include "Math2.h"
 #include "Mesa.h"
 #include "Taco.h"
 #include "Bolas.h"
@@ -35,8 +36,8 @@ public:
 
 
 	}
-	void update(float mouseX, float mouseY, bool mouseClick) {
-		mesa->update(mouseX, mouseY, mouseClick);
+	void update(Input& input) {
+		mesa->update(input);
 	}
 	void draw(sf::RenderWindow& window) {
 		mesa->draw(window);
