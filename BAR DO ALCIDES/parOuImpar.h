@@ -10,8 +10,8 @@
 class ImparOuPar {
 
 	Mesa* mesa;
-	Taco player1;
-	Taco player2;
+	//Taco player1;
+	//Taco player2;
 
 public:
 	ImparOuPar() {
@@ -35,8 +35,8 @@ public:
 
 
 	}
-	void update() {
-
+	void update(float mouseX, float mouseY, bool mouseClick) {
+		mesa->update(mouseX, mouseY, mouseClick);
 	}
 	void draw(sf::RenderWindow& window) {
 		mesa->draw(window);

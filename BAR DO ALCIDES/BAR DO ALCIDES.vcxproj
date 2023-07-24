@@ -142,6 +142,7 @@
     <ClInclude Include="Mesa.h" />
     <ClInclude Include="parOuImpar.h" />
     <ClInclude Include="Taco.h" />
+    <ClInclude Include="Vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
