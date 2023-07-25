@@ -53,6 +53,8 @@ protected:
 
 public:
 
+	sf::Sound ballCollision;
+
 //fisica
 //physics
 	sf::Vector2f pos;
@@ -67,6 +69,9 @@ public:
 		Bola(0);
 	}
 	Bola(int num) {
+
+		ballCollision.setBuffer(ResourceManager::getSound("../Assets/ballHit.mp3"));
+
 		vel.x = 0;
 		vel.y = 0;
 		radius = 18;

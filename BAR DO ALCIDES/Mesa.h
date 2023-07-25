@@ -12,7 +12,6 @@ public:
 	sf::Vector2f wallStart;
 	bool building = false;
 
-	sf::Sound ballCollision;
 	sf::Sound ballEnter;
 
 	Mesa() {
@@ -39,8 +38,8 @@ public:
 
 		Tacada taco();
 
-		ballCollision.setBuffer(ResourceManager::getSound("../Assets/ballHit.mp3"));
 		ballEnter.setBuffer(ResourceManager::getSound("../Assets/ballEnter.mp3"));
+		ballEnter.setVolume(70);
 
 
 	}
@@ -149,15 +148,18 @@ public:
 
 						
 						float speed = vb - va;
-						float pitch = 0.7 + constrain(1.8 * speed / 20, 0, 1);
 
-						
+						if (speed > 0.05) {
+							float pitch = 0.7 + constrain(1.8 * speed / 20, 0, 1);
 
-						ballCollision.setPitch(pitch);
-						ballCollision.setVolume(80 + (speed - 11)*5);
-						
 
-						ballCollision.play();
+
+							a.ballCollision.setPitch(pitch);
+							a.ballCollision.setVolume(80 + (speed - 11) * 5);
+
+
+							a.ballCollision.play();
+						}
 
 						float pva = vecDot(a.vel, perp);
 						float pvb = vecDot(b.vel, perp);
