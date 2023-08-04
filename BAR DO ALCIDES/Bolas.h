@@ -39,7 +39,8 @@ protected:
 	
 
 	inerciaRotacional L;
-	int mass;
+
+
 
 // isso é pra decorar as bolas
 // balls graphics and details
@@ -59,10 +60,12 @@ public:
 //physics
 	sf::Vector2f pos;
 	sf::Vector2f vel;
-	float friction = 0.005;
+	float friction = 0.0025;
 	int num;
 	int radius;
 	bool out = false;
+	float mass;
+	float invMass;
 
 
 	Bola() {
@@ -74,9 +77,10 @@ public:
 
 		vel.x = 0;
 		vel.y = 0;
-		radius = 18;
+		radius = 16;
 		mass = 1;
-		L = 2 / 5 * mass * (radius * radius);
+
+		//L = 2 / 5 * mass * (radius * radius);
 		this->num = num;
 
 		
@@ -85,6 +89,7 @@ public:
 
 		if (num == 0) {
 
+			mass = 22/16;
 			radius = 22;
 			shape.setFillColor(sf::Color::White);
 			BlackOrWhite.setFillColor(sf::Color::White);
@@ -115,6 +120,13 @@ public:
 			pos.x = START_POSITION_X + layer * layerHei;
 			pos.y = START_POSITION_Y - ((float)((radius * 2) * (layer + 1)) / 2) + (ballInd - layerMinNum(layer)) * radius * 2;
 			(num > 8) ? BlackOrWhite.setFillColor(sf::Color::White) : BlackOrWhite.setFillColor(sf::Color::Black);
+		}
+
+		if (mass == 0) {
+			invMass = 0;
+		}
+		else {
+			invMass = 1 / mass;
 		}
 
 		shape.setPosition(pos);

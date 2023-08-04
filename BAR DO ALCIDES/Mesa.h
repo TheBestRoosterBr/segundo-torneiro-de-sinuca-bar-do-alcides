@@ -133,10 +133,14 @@ public:
 
 					float overlap = (a.radius + b.radius) - dist;
 
-					sf::Vector2f move = vecMult(direction, overlap/2);
+					sf::Vector2f move = vecMult(direction, overlap);
 
-					a.pos += move;
-					b.pos -= move;
+					float aMass = 1 / (1+(a.invMass/b.invMass));
+
+					a.pos += move*aMass;
+					b.pos -= move*(1-aMass);
+
+					
 					
 
 
@@ -164,8 +168,14 @@ public:
 						float pva = vecDot(a.vel, perp);
 						float pvb = vecDot(b.vel, perp);
 
-						a.vel = vecMult(direction, vb) + vecMult(perp, pva);
-						b.vel = vecMult(direction, va) + vecMult(perp, pvb);
+						float firstMult = 2 * b.invMass / (a.invMass + b.invMass);
+						float lastMult = (b.invMass - a.invMass) / (a.invMass + b.invMass);
+
+						float fA = ((b.invMass - a.invMass) * va + 2 * vb * a.invMass) / (a.invMass + b.invMass);
+						float fB = ((a.invMass - b.invMass) * vb + 2 * va * b.invMass) / (b.invMass + a.invMass);
+
+						a.vel = vecMult(direction, fA) + vecMult(perp, pva);
+						b.vel = vecMult(direction, fB) + vecMult(perp, pvb);
 					}
 				}
 
@@ -176,8 +186,8 @@ public:
 
 		if (taco.hitted) {
 			taco.hitted = false;
-			balls[0].vel.x += cos(taco.hitAngle + PI)*(taco.hitPower*3+3);
-			balls[0].vel.y += sin(taco.hitAngle + PI) * (taco.hitPower*3+3);
+			balls[0].vel.x += cos(taco.hitAngle + PI)*(taco.hitPower*1.5+1);
+			balls[0].vel.y += sin(taco.hitAngle + PI) * (taco.hitPower*1.5+1);
 		}
 
 
