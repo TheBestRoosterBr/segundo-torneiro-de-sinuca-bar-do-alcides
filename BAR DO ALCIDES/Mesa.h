@@ -57,35 +57,40 @@ public:
 
 
 		for (int i = 0; i < balls.size(); i++) {
+
+			Bola& a = balls[i];
+			if (a.out) continue;
 			for (int j = 0; j < cacapas.size(); j++) {
-				Bola& a = balls[i];
+				
 				
 				float dist = vecLength(a.pos - cacapas[j].getPosition());
 
 				if (dist < cacapas[j].getRadius()) {
 
 					ballEnter.play();
+					a.enterHole();
 					if (a.num == 0) {
 						a.resetPos();
-						a.vel.x = 0;
-						a.vel.y = 0;
-					} else {
-						a.out = true;
 					}
 				}
 			}
 		}
 
+		/*
 		for (int i = 0; i < balls.size(); i++) {
 			if (balls[i].out) {
 				balls.erase(balls.begin() + i);
 				i--;
 			}
 		}
-
+		*/
 
 		for (int i = 0; i < balls.size(); i++) {
 			Bola& a = balls[i];
+
+			if (a.out) {
+				continue;
+			}
 
 			for (int j = 0; j < walls.size(); j++) {
 				Wall& w = walls[j];
@@ -122,6 +127,10 @@ public:
 			for (int j = i+1; j < balls.size(); j++) {
 				
 				Bola& b = balls[j];
+
+				if (b.out) {
+					continue;
+				}
 
 				sf::Vector2f dif = a.pos - b.pos;
 				float dist = vecLength(dif);

@@ -103,6 +103,7 @@ void ResourceManager::deleteFont(const std::string& filename) {
 
 Game::Game(int x, int y, const char * title) {
 	this->window = new sf::RenderWindow(sf::VideoMode(x, y), title);
+	this->window->setFramerateLimit(60);
 	
 }
 
