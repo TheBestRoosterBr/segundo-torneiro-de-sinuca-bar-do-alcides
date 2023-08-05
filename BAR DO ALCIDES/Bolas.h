@@ -64,6 +64,8 @@ public:
 	int num;
 	int radius;
 	bool out = false;
+	int outTime = 60;
+	int outTimer = 0;
 	float mass;
 	float invMass;
 
@@ -136,11 +138,31 @@ public:
 	void init() {
 
 	}
+
+	void enterHole() {
+		if (num != 0) {
+			out = true;
+			outTimer = outTime;
+		}
+
+		vel.x = 0;
+		vel.y = 0;
+	}
+
 	void update() {
 		pos.x += vel.x;
 		pos.y += vel.y;
 
 		vel -= vecMult(vecNormal(vel), friction);
+
+		if (out && outTimer > 0) {
+			outTimer--;
+
+			float newRad = radius * (outTimer / outTime);
+			shape.setRadius(newRad);
+			shape.setOrigin(newRad, newRad);
+		}
+
 	}
 
 	void boundsConstrain(int x, int y, int wid, int hei) {
